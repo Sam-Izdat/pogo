@@ -25,7 +25,7 @@ It's still very raw. A pre-release is available. Contributions and bug reports a
 
 [![Build Status](http://drone.io/github.com/Sam-Izdat/pogo/status.png)](https://drone.io/github.com/Sam-Izdat/pogo/latest) 
 [![License MIT](http://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-[![GoDoc](http://img.shields.io/badge/doc-REFERENCE-blue.svg?style=flat-square)](https://godoc.org/github.com/Sam-Izdat/pogo)
+[![GoDoc](http://img.shields.io/badge/doc-REFERENCE-blue.svg?style=flat-square)](https://godoc.org/github.com/Sam-Izdat/pogo/translate)
 [![Donate](http://img.shields.io/badge/needfood-GIVEMEMONEYS-yellow.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CY6VMGLZ7XA64)
 
 ##Getting started
