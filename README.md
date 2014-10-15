@@ -39,7 +39,7 @@ Now, edit the top few settings in the generated POGO.toml file. It should be eno
 ###Putting it to use
 Here's a basic webserver that can be found in the example folder.
 
-```pogo
+```go
 package main
     
 import (
