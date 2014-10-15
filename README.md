@@ -10,7 +10,7 @@
 ##Features 
 
 - i18n in your templates, not crammed into them as an afterthought
-- Simple CLI package to extract strings in lieu xgettext
+- Simple CLI package to extract strings in lieu of xgettext
 - Built-in support for pluralization rules, from Alcholi to Yoruba
 - Built-in support for context fields
 
