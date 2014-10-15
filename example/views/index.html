@@ -1,0 +1,53 @@
+{{define "body"}}
+    <h2>Translation</h2>
+    <p>{{.T.G "callie come down from there"}}</p>
+
+    <h2>Context</h2>
+    <p>{{.T.PG "fruit" "orange"}}</p>
+    <p>{{.T.PG "color" "orange"}}</p>
+
+    <h2>Interpolation</h2>
+    <p>{{.T.G "No war %s" "between people"}}</p>
+    <p>{{.T.G "No peace %s" "between classes"}}</p>
+
+    <h2>Plurals</h2>
+    <p>{{.T.NG "%d penguin is staring at you" "%d penguins are staring at you" 1}}</p>
+    <p>{{.T.NG "%d penguin is staring at you" "%d penguins are staring at you" 2}}</p>
+    <p>{{.T.NG "%d penguin is staring at you" "%d penguins are staring at you" 5}}</p>
+    <p>{{.T.NG "%d penguin is staring at you" "%d penguins are staring at you" 21}}</p>
+    <p>{{.T.NG "%d penguin is staring at you" "%d penguins are staring at you" 111}}</p>
+    <p>{{.T.NG "%d penguin is staring at you" "%d penguins are staring at you" 121}}</p>
+
+    <h3>Dealing with order and scope</h3>
+    <div style="max-height: 300px; overflow: auto; border: 1px dashed #ccc; padding: 5px;">
+    {{range .Bottles}}
+    <p>{{$.T.NG "%[2]d bottle of beer %[1]s!" "%[2]d bottles of beer %[1]s!" "on the wall" (.)}}</p>
+    {{end}}
+    </div>
+
+    <h2>Plurals with context</h2>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 0}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 1}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 2}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 5}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 21}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 101}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 111}}</p>
+    <p>{{.T.NPG "fruit" "I have %d orange!" "I have %d oranges!" 121}}</p>
+
+    <h2>Nested functions</h2>
+    <p>{{.T.G "%s is a fruit." (.T.PG "fruit" "orange")}}</p>
+    <p>{{.T.G "%s is a color." (.T.PG "color" "orange")}}</p>
+    <br>
+    <p>{{.T.G "you have %s in this folder" (.T.NG "%d file" "%d files" 0)}}</p>
+    <p>{{.T.G "you have %s in this folder" (.T.NG "%d file" "%d files" 1)}}</p>
+    <p>{{.T.G "you have %s in this folder" (.T.NG "%d file" "%d files" 3)}}</p>
+    <p>{{.T.G "you have %s in this folder" (.T.NG "%d file" "%d files" 5)}}</p>
+    <p>{{.T.G "you have %s in this folder" (.T.NG "%d file" "%d files" 21)}}</p>
+
+    <h2>Interpolation with printf directly</h2>
+    <p>{{printf (.T.G "You see %s in the corner") (.T.NG "%d chair" "%d chairs" 1)}}</p>
+    <p>{{printf (.T.G "You see %s in the corner") (.T.NG "%d chair" "%d chairs" 2)}}</p>
+    <p>{{printf (.T.G "You see %s in the corner") (.T.NG "%d chair" "%d chairs" 12)}}</p>
+    <p>{{printf (.T.G "You see %s in the corner") (.T.NG "%d chair" "%d chairs" 21)}}</p>
+{{end}}
