@@ -17,7 +17,6 @@
 ##Install
 
     $ go get github.com/Sam-Izdat/pogo
-    $ go install github.com/Sam-Izdat/pogo
 
 ##Status
 
