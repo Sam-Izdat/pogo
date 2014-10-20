@@ -20,12 +20,11 @@
 
 ##Status
 
-It's still very raw. A pre-release is available. Contributions and bug reports are most welcome. If you find this helpful and feel generous you can throw me some loose change.
+It's still very raw. A pre-release is available. Contributions and bug reports are most welcome.
 
 [![Build Status](http://drone.io/github.com/Sam-Izdat/pogo/status.png)](https://drone.io/github.com/Sam-Izdat/pogo/latest) 
 [![License MIT](http://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![GoDoc](http://img.shields.io/badge/doc-REFERENCE-blue.svg?style=flat-square)](https://godoc.org/github.com/Sam-Izdat/pogo/translate)
-[![Donate](http://img.shields.io/badge/needfood-GIVEMEMONEYS-yellow.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CY6VMGLZ7XA64)
 
 ##Getting started
 If your `GOPATH` and `GOBIN` environment variables were set correctly, you should now be able to run `pogo` from any directory. This little CLI package will scan your project for calls pogo's gettext-ish functions and compile string literals into po files. The first thing is to initialize it in the main project directory and set up a configuration file.
