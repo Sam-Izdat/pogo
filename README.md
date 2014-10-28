@@ -45,19 +45,22 @@ import (
     "net/http"
     "html/template"
     "path/filepath"
-    pogo "github.com/Sam-Izdat/pogo/translate"
+    "github.com/Sam-Izdat/pogo/translate"
 )
+
+// Load your POGO.toml configuration file *before* processing the request
+var POGO = translate.LoadCfg("github.com/MyStuff/MyProject")
 
 func handler(w http.ResponseWriter, r *http.Request) {
     // Grab a translator in your request flow
-    var T = pogo.New("ru") // "ru" is Russian
+    var T = POGO.New("ru") // "ru" is Russian
 
     // Set up some data for the template
     var bottles []int
     for i := 99; i >= 0; i-- { bottles = append(bottles, i) }
 
     data := struct {
-        T pogo.Translator       // Throw a translator at the template
+        T translate.Translator  // Throw a translator at the template
         Title string
         Bottles []int
     } {
@@ -73,9 +76,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    // Load your POGO.toml configuration file *before* processing the request
-    pogo.LoadCfg("github.com/MyStuff/MyProject")
-
     // Point to a handler and serve
     port := ":8383"
     fmt.Println("Serving on port", port)

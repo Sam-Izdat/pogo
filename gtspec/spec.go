@@ -120,11 +120,12 @@ func LoadOptionsGOPATH(path string) (Config, error) {
 // GetPluralIdx returns the index of a plural translation,
 // determined by locale and count
 func GetPluralIdx(locale string, ct int) (int, error) {
-	if Plurals[locale] != nil {
+	var ok bool
+	if _, ok = Plurals[locale]; ok {
 		return Plurals[locale].Idx(ct), nil
 	} else {
 		lang := strings.Split(locale, "_")[0]
-		if Plurals[lang] != nil {
+		if _, ok = Plurals[lang]; ok {
 			return Plurals[lang].Idx(ct), nil
 		}
 	}
@@ -135,11 +136,12 @@ func GetPluralIdx(locale string, ct int) (int, error) {
 // or 2 on failure
 func GetPluralNum(locale string) int {
 	var header string
-	if Plurals[locale] != nil {
+	var ok bool
+	if _, ok = Plurals[locale]; ok {
 		header = Plurals[locale].Header()
 	} else {
 		lang := strings.Split(locale, "_")[0]
-		if Plurals[lang] != nil {
+		if _, ok = Plurals[lang]; ok {
 			header = Plurals[lang].Header()
 		}
 	}

@@ -10,46 +10,50 @@ import (
 	"strings"
 )
 
-// Translator creates locale-bound instances used for translation methods.
-// It is exported for reference, but the translate.New constructor should be
+// Translator delivers translation methods for a particular locale.
+// It is exported for reference, but the New constructor should be
 // used to initialize every translator.
 type Translator struct {
 	Locale string
+	Ctrl   POGOCtrl
 }
 
 type collection map[string]gt.Catalog
 
-var Catalogs collection
-
-var o spec.Config
-
-// New takes a locale and creates a new translator
-func New(locale string) Translator {
-	if o.General.ProjectFN == "" {
-		panic("no pogo configuration loaded")
-	}
-	readMo(locale)
-	return Translator{locale}
+// POGOCtrl is a configured handler for constructing translators
+type POGOCtrl struct {
+	o        spec.Config
+	Catalogs collection
 }
 
 // LoadCfg takes the path of the project directory
 // (relative to $GOPATH/src/) containing the POGO.toml
 // configuration file and loads the configuration variables.
 // Normally, this will be the main directory of your package.
-func LoadCfg(path string) {
+func LoadCfg(path string) POGOCtrl {
 	var err error
-	o, err = spec.LoadOptionsGOPATH(path)
+	o, err := spec.LoadOptionsGOPATH(path)
 	if err != nil {
 		panic(err)
 	}
+	return POGOCtrl{o, make(collection)}
 }
 
-func readMo(locale string) {
-	if _, ok := Catalogs[locale]; ok {
+// New takes a locale and creates a new translator
+func (p POGOCtrl) New(locale string) Translator {
+	if p.o.General.ProjectFN == "" {
+		panic("no pogo configuration loaded")
+	}
+	p.readMo(locale)
+	return Translator{locale, p}
+}
+
+func (p *POGOCtrl) readMo(locale string) {
+	if _, ok := p.Catalogs[locale]; ok {
 		return
 	}
-	fn := strings.Join([]string{o.General.ProjectFN, ".", locale, ".mo"}, "")
-	path := filepath.Join(o.General.DirLocale, locale, o.General.DirMessages, fn)
+	fn := strings.Join([]string{p.o.General.ProjectFN, ".", locale, ".mo"}, "")
+	path := filepath.Join(p.o.General.DirLocale, locale, p.o.General.DirMessages, fn)
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
@@ -58,18 +62,14 @@ func readMo(locale string) {
 	if err := c.ReadMo(bytes.NewReader(data)); err != nil {
 		panic(err)
 	}
-	Catalogs[locale] = *c
-}
-
-func init() {
-	Catalogs = make(collection)
+	p.Catalogs[locale] = *c
 }
 
 // G translates a string. The first argument must be
 // the string to be translated. Any subsequent arguments
 // will be translated, if possible, and considered arguments
 // for sprintf.
-func (p Translator) G(input ...interface{}) string {
+func (t Translator) G(input ...interface{}) string {
 	if len(input) < 1 {
 		return ""
 	}
@@ -78,11 +78,11 @@ func (p Translator) G(input ...interface{}) string {
 	// translate chain of remaining string inputs
 	for k, v := range input[1:] {
 		if s, ok := v.(string); ok {
-			input[k+1] = p.G(s)
+			input[k+1] = t.G(s)
 		}
 	}
 
-	c := Catalogs[p.Locale]
+	c := t.Ctrl.Catalogs[t.Locale]
 	if msg, ok := c.Msgs[id]; ok {
 		if text := msg.Str; text != nil {
 			if len(input) < 2 {
@@ -107,7 +107,7 @@ func (p Translator) G(input ...interface{}) string {
 // must be the quantity; any other arguments preceding it
 // will be translated, if possible, and considered arguments
 // for sprintf.
-func (p Translator) NG(input ...interface{}) string {
+func (t Translator) NG(input ...interface{}) string {
 	if len(input) < 3 {
 		return ""
 	}
@@ -116,13 +116,13 @@ func (p Translator) NG(input ...interface{}) string {
 	// translate chain of remaining string inputs
 	for k, v := range input[2:] {
 		if s, ok := v.(string); ok {
-			input[k+2] = p.G(s)
+			input[k+2] = t.G(s)
 		}
 	}
 
-	idx, err := spec.GetPluralIdx(p.Locale, ct)
+	idx, err := spec.GetPluralIdx(t.Locale, ct)
 	if err == nil {
-		c := Catalogs[p.Locale]
+		c := t.Ctrl.Catalogs[t.Locale]
 		if msg, ok := c.Msgs[input[0].(string)]; ok {
 			if text := msg.StrPlural[idx]; text != nil {
 				if len(input) < 3 {
@@ -144,7 +144,7 @@ func (p Translator) NG(input ...interface{}) string {
 // must be the context; the second must be the string to be translated.
 // Any subsequent arguments will be translated, if possible,
 // and considered arguments for sprintf.
-func (p Translator) PG(input ...interface{}) string {
+func (t Translator) PG(input ...interface{}) string {
 	if len(input) < 2 {
 		return ""
 	}
@@ -152,11 +152,11 @@ func (p Translator) PG(input ...interface{}) string {
 	// translate chain of remaining string inputs
 	for k, v := range input[2:] {
 		if s, ok := v.(string); ok {
-			input[k+2] = p.G(s)
+			input[k+2] = t.G(s)
 		}
 	}
 
-	c := Catalogs[p.Locale]
+	c := t.Ctrl.Catalogs[t.Locale]
 	key := strings.Join([]string{input[0].(string), "\x04", input[1].(string)}, "")
 	if msg, ok := c.Msgs[key]; ok {
 		if text := msg.Str; text != nil {
@@ -177,7 +177,7 @@ func (p Translator) PG(input ...interface{}) string {
 // the *last* argument must be the quantity; any other arguments
 // preceding it will be translated, if possible, and considered
 // arguments for sprintf.
-func (p Translator) NPG(input ...interface{}) string {
+func (t Translator) NPG(input ...interface{}) string {
 	if len(input) < 4 {
 		return ""
 	}
@@ -185,14 +185,14 @@ func (p Translator) NPG(input ...interface{}) string {
 	// translate chain of remaining string inputs
 	for k, v := range input[3:] {
 		if s, ok := v.(string); ok {
-			input[k+3] = p.G(s)
+			input[k+3] = t.G(s)
 		}
 	}
 
 	ct := input[len(input)-1].(int)
-	idx, err := spec.GetPluralIdx(p.Locale, ct)
+	idx, err := spec.GetPluralIdx(t.Locale, ct)
 	if err == nil {
-		c := Catalogs[p.Locale]
+		c := t.Ctrl.Catalogs[t.Locale]
 		key := strings.Join([]string{input[0].(string), "\x04", input[1].(string)}, "")
 		if msg, ok := c.Msgs[key]; ok {
 			if text := msg.StrPlural[idx]; text != nil {
