@@ -57,18 +57,9 @@ func drawBlock(msg spec.Msg, target string) string {
 			response = append(response, addPOString("msgstr[0]", ""))
 			response = append(response, addPOString("msgstr[1]", ""))
 		} else {
-			// Get number of plurals
-			loc := strings.Split(target, "_")[0]
-			tmp := spec.Plurals[loc].Header()
-			tmp = strings.Split(tmp, ";")[0]
-			tmp = strings.Split(tmp, "=")[1]
-			nplurals, err := strconv.Atoi(tmp)
-			if err != nil {
-				response = append(response, addPOString("msgstr[0]", ""))
-			} else {
-				for i := 0; i < nplurals; i++ {
-					response = append(response, addPOString("msgstr["+strconv.Itoa(i)+"]", ""))
-				}
+			nplurals := spec.GetPluralNum(target)
+			for i := 0; i < nplurals; i++ {
+				response = append(response, addPOString("msgstr["+strconv.Itoa(i)+"]", ""))
 			}
 		}
 	} else {
