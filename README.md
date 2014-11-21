@@ -16,7 +16,7 @@
 
 ##Install
 
-    $ go get github.com/Sam-Izdat/pogo
+    $ go get gopkg.in/Sam-Izdat/pogo.v0
 
 ##Status
 
@@ -45,7 +45,7 @@ import (
     "net/http"
     "html/template"
     "path/filepath"
-    "github.com/Sam-Izdat/pogo/translate"
+    "gopkg.in/Sam-Izdat/pogo.v0"
 )
 
 // Load your POGO.toml configuration file *before* processing the request
