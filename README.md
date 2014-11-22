@@ -16,7 +16,7 @@
 
 ##Install
 
-    $ go get gopkg.in/Sam-Izdat/pogo.v0
+    $ go get github.com/Sam-Izdat/pogo
 
 ##Status
 
