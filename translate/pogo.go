@@ -32,7 +32,7 @@ type POGOCtrl struct {
 // Normally, this will be the main directory of your package.
 func LoadCfg(path string) POGOCtrl {
 	var err error
-	o, err := spec.LoadOptions(path)
+	o, err := spec.LoadOptionsGOPATH(path)
 	if err != nil {
 		panic(err)
 	}
