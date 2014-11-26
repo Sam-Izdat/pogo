@@ -45,7 +45,7 @@ import (
     "net/http"
     "html/template"
     "path/filepath"
-    "gopkg.in/Sam-Izdat/pogo.v0"
+    "github.com/Sam-Izdat/pogo/translate"
 )
 
 // Load your POGO.toml configuration file *before* processing the request
