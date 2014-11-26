@@ -168,7 +168,7 @@ Now that there's some stuff to be translated you can compile the po files. One f
 built upon:
 - [gorilla web toolkit](https://github.com/gorilla)'s mo reader & writer, template parser
 - [odin](https://github.com/jwaldrip/odin) CLI library
-- [TOML parser](TOML parser)
+- [TOML parser](https://github.com/BurntSushi/toml)
 
 #License
 
