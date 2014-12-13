@@ -1,7 +1,6 @@
 package po
 
 import (
-	"fmt"
 	prsTmpl "github.com/Sam-Izdat/pogo/deps/template/parse"
 	spec "github.com/Sam-Izdat/pogo/gtspec"
 	"go/ast"
