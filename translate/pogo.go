@@ -26,6 +26,9 @@ type POGOCtrl struct {
 	Catalogs collection
 }
 
+var LangDefault string
+var LangsSupported = map[string]bool{}
+
 // LoadCfg takes the path of the project directory
 // (relative to $GOPATH/src/) containing the POGO.toml
 // configuration file and loads the configuration variables.
@@ -36,6 +39,10 @@ func LoadCfg(path string) POGOCtrl {
 	if err != nil {
 		panic(err)
 	}
+	LangDefault = o.General.Targets[0]
+	for _, v := range o.General.Targets {
+		LangsSupported[v] = true
+	}
 	return POGOCtrl{o, make(collection)}
 }
 
@@ -43,6 +50,9 @@ func LoadCfg(path string) POGOCtrl {
 func (p POGOCtrl) New(locale string) Translator {
 	if p.o.General.ProjectFN == "" {
 		panic("no pogo configuration loaded")
+	}
+	if supported, ok := LangsSupported[locale]; !ok || !supported {
+		locale = LangDefault
 	}
 	p.readMo(locale)
 	return Translator{locale, p}
