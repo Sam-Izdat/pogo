@@ -46,12 +46,33 @@ func LoadCfg(path string) POGOCtrl {
 	return POGOCtrl{o, make(collection)}
 }
 
-// New takes a locale and creates a new translator
+// New takes a locale string and creates a new translator
 func (p POGOCtrl) New(locale string) Translator {
 	if p.o.General.ProjectFN == "" {
 		panic("no pogo configuration loaded")
 	}
 	if supported, ok := LangsSupported[locale]; !ok || !supported {
+		locale = LangDefault
+	}
+	p.readMo(locale)
+	return Translator{locale, p}
+}
+
+// NewQV takes a slice of locale strings, sorted by quality value and creates
+// the best available translator, falling back on default (first) language if
+// no match is found.
+func (p POGOCtrl) NewQV(locales []string) Translator {
+	if p.o.General.ProjectFN == "" {
+		panic("no pogo configuration loaded")
+	}
+	var locale string
+	for _, v := range locales {
+		if supported, ok := LangsSupported[v]; ok && supported {
+			locale = v
+			break
+		}
+	}
+	if locale == "" {
 		locale = LangDefault
 	}
 	p.readMo(locale)
