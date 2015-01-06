@@ -66,7 +66,7 @@ type confMeta struct {
 }
 
 var ps = string(os.PathSeparator)
-var cfgFN = "POGO.toml"
+var CFGFN = "POGO.toml"
 
 func LoadOptions() (Config, error) {
 	var options Config
@@ -80,10 +80,10 @@ func LoadOptions() (Config, error) {
 	c := strings.Split(path, ps[:1])
 	for k := range c {
 		dir = strings.Join(c[:len(c)-k], ps)
-		if _, err := os.Stat(dir + ps + cfgFN); os.IsNotExist(err) { // file does not exist
+		if _, err := os.Stat(dir + ps + CFGFN); os.IsNotExist(err) { // file does not exist
 			continue
 		} else if err == nil { // file exists
-			data, err := ioutil.ReadFile(dir + ps + cfgFN)
+			data, err := ioutil.ReadFile(dir + ps + CFGFN)
 			if err != nil {
 				return Config{}, err
 			}
@@ -104,7 +104,7 @@ func LoadOptionsGOPATH(path string) (Config, error) {
 	var options Config
 	gopath := os.Getenv("GOPATH")
 	path = gopath + ps + "src" + ps + path
-	data, err := ioutil.ReadFile(path + ps + cfgFN)
+	data, err := ioutil.ReadFile(path + ps + CFGFN)
 	if err != nil {
 		return Config{}, err
 	}

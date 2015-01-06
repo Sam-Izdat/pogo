@@ -14,9 +14,11 @@ import (
 )
 
 var gf, ngf, pgf, npgf, lDelim, rDelim string
-var cfgFN = "POGO.toml"
+var cfgFN string
 
 func init() {
+	loadOptions()
+	cfgFN = spec.CFGFN
 	gf = o.Parsing.FuncG     // "gettext" function
 	ngf = o.Parsing.FuncNG   // "ngettext" function
 	pgf = o.Parsing.FuncPG   // "pgettext" function
