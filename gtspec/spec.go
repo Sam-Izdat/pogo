@@ -102,8 +102,13 @@ func LoadOptions() (Config, error) {
 
 func LoadOptionsGOPATH(path string) (Config, error) {
 	var options Config
-	gopath := os.Getenv("GOPATH")
-	path = gopath + ps + "src" + ps + path
+	if path[0:1] != ps {
+		// If the path is relative (does not beggin with a path separator)
+		// try to obtain the $GOPATH environment variable. Otherwise,
+		// take the path as-is.
+		gopath := os.Getenv("GOPATH")
+		path = gopath + ps + "src" + ps + path
+	}
 	data, err := ioutil.ReadFile(path + ps + CFGFN)
 	if err != nil {
 		return Config{}, err
