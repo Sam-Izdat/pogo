@@ -32,7 +32,19 @@ If your `GOPATH` and `GOBIN` environment variables were set correctly, you shoul
     $ cd github.com/MyStuff/MyProject
     $ pogo init
 
-Now, edit the top few settings in the generated POGO.toml file. It should be enough to name your project and give it a list of target locales. That's it. There are no domains, as such. When pogo walks the directory it'll search until it bumps into another POGO.toml file somewhere; if it does, that subdirectory will be ignored and left to another configuration and collection of catalogs. If needed, an application's translation files can be compartmentalized by packages, or just by separate directories of views.
+Now, edit the top few settings in the generated POGO.toml file, describing the translation project and providing a list of target locales. You can specify an arbitrary name and base filename for the set of catalogs (.pot/.po files) covered by this pogo project. For example:
+
+    targets             = ["en_US", "en_GB", "ja"]
+    project_name        = "My Application User Control Panel"
+    project_filename    = "my_app_user_cp"
+
+or
+
+    targets             = ["en_US", "en_GB", "ja"]
+    project_name        = "My Application Administrator Control Panel"
+    project_filename    = "my_app_admin_cp"
+
+That's it. There are no domains, as such. When pogo walks the directory it'll search until it bumps into another POGO.toml file somewhere; if it does, that subdirectory will be ignored and left to another configuration and collection of catalogs. If needed, an application's translation files can be compartmentalized by packages, or just by separate directories of views.
 
 ###Putting it to use
 Here's a basic webserver that can be found in the example folder.
