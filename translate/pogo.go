@@ -39,7 +39,7 @@ func LoadCfg(path string) POGOCtrl {
 	if err != nil {
 		panic(err)
 	}
-	LangDefault = o.General.Targets[0]
+	LangDefault = "UNSUPPORTED"
 	for _, v := range o.General.Targets {
 		LangsSupported[v] = true
 	}
@@ -53,8 +53,9 @@ func (p POGOCtrl) New(locale string) Translator {
 	}
 	if supported, ok := LangsSupported[locale]; !ok || !supported {
 		locale = LangDefault
+	} else {
+		p.readMo(locale)
 	}
-	p.readMo(locale)
 	return Translator{locale, p}
 }
 
