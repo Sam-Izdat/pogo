@@ -3,22 +3,22 @@
 
 ...provides gettext-like internationalization for golang 
 
-##Why?
+## Why?
 
 ...because most of the major, recurrent challenges in internationalizing software have been addressed by GNU almost twenty years ago and golang is badly lacking in this functionality. Gettext enjoys extremely wide adoption, established toolchains and great popularity among both translators and programmers. It's simple. It provides for better separation of localization from the rest of your architecture, allows non-programmers to translate your software, eliminates ugly, unmanageable JSON files and, when used properly, effectively solves the problems of context and grammatical differences in pluralization. Until something better comes along, it just doesn't make much sense to reinvent the square wheel. This project is meant to be a loose interpretation replicating the most useful functionality and making use of common po/mo standards.
 
-##Features 
+## Features 
 
 - i18n in your templates, not crammed into them as an afterthought
 - Simple CLI package to extract strings in lieu of xgettext
 - Built-in support for pluralization rules, from Alcholi to Yoruba
 - Built-in support for context fields
 
-##Install
+## Install
 
     $ go get github.com/Sam-Izdat/pogo
 
-##Status
+## Status
 
 It's still very raw. A pre-release is available. Contributions and bug reports are most welcome.
 
@@ -26,7 +26,7 @@ It's still very raw. A pre-release is available. Contributions and bug reports a
 [![License MIT](http://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![GoDoc](http://img.shields.io/badge/doc-REFERENCE-blue.svg?style=flat-square)](https://godoc.org/github.com/Sam-Izdat/pogo/translate)
 
-##Getting started
+## Getting started
 If your `GOPATH` and `GOBIN` environment variables were set correctly, you should now be able to run `pogo` from any directory. This little CLI package will scan your project for calls pogo's gettext-ish functions and compile string literals into po files. The first thing is to initialize it in the main project directory and set up a configuration file.
 
     $ cd github.com/MyStuff/MyProject
@@ -46,7 +46,7 @@ or
 
 That's it. There are no domains, as such. When pogo walks the directory it'll search until it bumps into another POGO.toml file somewhere; if it does, that subdirectory will be ignored and left to another configuration and collection of catalogs. If needed, an application's translation files can be compartmentalized by packages, or just by separate directories of views.
 
-###Putting it to use
+### Putting it to use
 Here's a basic webserver that can be found in the example folder.
 
 ```go
@@ -95,7 +95,7 @@ func main() {
     http.ListenAndServe(port, nil)
 }
 ```
-###Translating strings
+### Translating strings
 By default, a pogo "translator" exports four methods called:
 - `G()` - for basic translation (roughly equivalent to `gettext()` or `_()`)
 - `PG()` - for translation with context (`pgettext()`)
@@ -106,7 +106,7 @@ It will be expected by the CLI program that the above are reserved for pogo in .
 
 String literals can be queued up for translation directly in your go files but, chances are, most of the content to be translated will reside in templates. Passing the translator to a template as above now lets you do this:
 
-####G - just translate
+#### G - just translate
 ```
 {{.T.G "A robot?!"}}
 ```
@@ -117,7 +117,7 @@ All of these functions are variadic and will take an arbitrary number of argumen
 ```
 The words "my shoes" above will be translated if a translation is available. 
 
-####PG - context
+#### PG - context
 `PG()` allows you to provide a context for the translator, which is passed as the first argument:
 
 ```
@@ -126,7 +126,7 @@ The words "my shoes" above will be translated if a translation is available.
 {{.T.PG "the price on an item" "tag"}}
 ```
 
-####NG - plurals
+#### NG - plurals
 `NG()` is for anything that may vary in quantity:
 ```
 {{.T.NG "You have %d new message" "You have %d new messages" .ctMsg}}
@@ -137,7 +137,7 @@ The first argument must be the singular form of the string to be translated; the
 {{.T.NG "I ate %[2]d muffin %[1]s" "I ate %[2]d muffins %[1]s" "yesterday" .ctMuffins}}
 ```
 
-####NPG - plurals & context
+#### NPG - plurals & context
 `NPG()` takes at least four arguments, combining the purposes of `PG()` and `NG()`:
 ```
 {{.T.NPG "sternly!" "Delete %d file?" "Delete %d files?" .ctFiles}}
@@ -153,7 +153,7 @@ Use a sigil (`$`) to access `T` while ranging over something or within condition
 ```
 There's really not much more to it.
 
-###Mos, pos and pots and other things
+### Mos, pos and pots and other things
 
 Now that there's some stuff to be translated you can compile the po files. One file with the extension "pot" will serve as the original template and every locale will have its own "po" file (catalog) containing the actual translations. Editors like Poedit can merge these catalogs with any new messages added to the template. 
 
@@ -167,7 +167,7 @@ Now that there's some stuff to be translated you can compile the po files. One f
 
 ...will produce individual po files for all your targets with some meta-data already in place. Whenever you have new strings to translate, just run `pogo build -o pot` again. It does roughly what xgettext does. Currently pogo does not compile mo files and leaves that up the fancy editors. 
 
-#On the to-do list
+# On the to-do list
 
 - [ ] Unit tests
 - [ ] Better documentation
@@ -176,12 +176,12 @@ Now that there's some stuff to be translated you can compile the po files. One f
 - [ ] "pogo status" CLI command
 - [ ] HTML UI stats, previews
 
-#Attributions
+# Attributions
 built upon:
 - [gorilla web toolkit](https://github.com/gorilla)'s mo reader & writer, template parser
 - [odin](https://github.com/jwaldrip/odin) CLI library
 - [TOML parser](https://github.com/BurntSushi/toml)
 
-#License
+# License
 
 MIT for pogo; see dependencies' docs for their respective licenses
